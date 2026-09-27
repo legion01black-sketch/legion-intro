@@ -11,557 +11,314 @@
 <style>
 
 html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
 }
 
-
-/* =====================================================
-   PAGINA YOUTUBE - SEMPRE DIETRO
-   ===================================================== */
-
-#channel{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:1;
-}
-
-
-/* =====================================================
+/* ==================================================
    LEGION
-   ===================================================== */
+   ================================================== */
 
 #legion{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:2;
-
-    /*
-    Legion rimane visibile.
-    Sparisce SOLO quando il fumo lo ha coperto.
-    */
-
-    animation:
-        legionDisappear .20s linear 2.95s forwards;
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  z-index:1;
 }
 
 
-@keyframes legionDisappear{
-
-    0%{
-        opacity:1;
-        visibility:visible;
-    }
-
-    100%{
-        opacity:0;
-        visibility:hidden;
-    }
-}
-
-
-/* =====================================================
-   CONTENITORE FUMO
-   ===================================================== */
+/* ==================================================
+   STRATO FUMO
+   ================================================== */
 
 #smoke{
-    position:fixed;
-    inset:-20%;
-    width:140%;
-    height:140%;
-    z-index:5;
-    pointer-events:none;
-    overflow:hidden;
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:3;
+  pointer-events:none;
+  overflow:hidden;
+  background:#000;
+  opacity:0;
+  animation:smokeLayer 2.7s ease-in-out 1.55s forwards;
 }
 
 
-/* =====================================================
-   ASPETTO GENERALE FUMO
-   NERO + ROSSO
-   ===================================================== */
+/* ==================================================
+   NUVOLE DI FUMO NERO
+   ================================================== */
 
-.smoke{
-    position:absolute;
+.puff{
+  position:absolute;
 
-    border-radius:
-        45% 55% 62% 38% /
-        55% 42% 58% 45%;
+  border-radius:45% 55% 50% 50%;
 
+  opacity:0;
+
+  filter:
+    blur(28px)
+    contrast(1.3);
+
+  background:
+    radial-gradient(
+      ellipse at 45% 50%,
+      rgba(0,0,0,1) 0%,
+      rgba(5,5,5,.98) 25%,
+      rgba(12,12,12,.92) 45%,
+      rgba(20,20,20,.65) 62%,
+      rgba(0,0,0,0) 78%
+    );
+}
+
+
+/* FUMO DA SINISTRA */
+
+.p1{
+  width:95vmax;
+  height:70vmax;
+
+  left:-70vmax;
+  top:-10vmax;
+
+  animation:
+    smokeLeft 2.4s
+    ease-in-out
+    1.55s forwards;
+}
+
+
+/* FUMO DA DESTRA */
+
+.p2{
+  width:100vmax;
+  height:75vmax;
+
+  right:-75vmax;
+  top:5vh;
+
+  animation:
+    smokeRight 2.5s
+    ease-in-out
+    1.65s forwards;
+}
+
+
+/* FUMO DAL BASSO */
+
+.p3{
+  width:110vmax;
+  height:80vmax;
+
+  left:-5vmax;
+  bottom:-70vmax;
+
+  animation:
+    smokeBottom 2.6s
+    ease-in-out
+    1.70s forwards;
+}
+
+
+/* NUBE CENTRALE */
+
+.p4{
+  width:105vmax;
+  height:90vmax;
+
+  left:-2vmax;
+  top:5vh;
+
+  animation:
+    smokeCenter 2.3s
+    ease-in-out
+    1.80s forwards;
+}
+
+
+/* ==================================================
+   OSCURAMENTO GENERALE
+   ================================================== */
+
+@keyframes smokeLayer{
+
+  0%{
     opacity:0;
+    background:rgba(0,0,0,0);
+  }
 
-    filter:
-        blur(22px)
-        contrast(1.35)
-        saturate(1.45);
+  30%{
+    opacity:1;
+    background:rgba(0,0,0,.10);
+  }
 
-    background:
+  60%{
+    opacity:1;
+    background:rgba(0,0,0,.60);
+  }
 
-        radial-gradient(
-            ellipse at 35% 45%,
-            rgba(255,0,0,.90) 0%,
-            rgba(170,0,0,.72) 13%,
-            rgba(35,0,0,.88) 30%,
-            rgba(0,0,0,.98) 52%,
-            rgba(0,0,0,.70) 68%,
-            transparent 82%
-        ),
+  82%{
+    opacity:1;
+    background:rgba(0,0,0,.96);
+  }
 
-        radial-gradient(
-            ellipse at 70% 55%,
-            rgba(0,0,0,1) 0%,
-            rgba(18,18,18,.98) 38%,
-            rgba(130,0,0,.65) 60%,
-            transparent 80%
-        );
+  100%{
+    opacity:1;
+    background:#000;
+  }
 }
 
 
-/* =====================================================
-   NUBE SINISTRA
-   ===================================================== */
-
-.s1{
-
-    width:90vmax;
-    height:65vmax;
-
-    left:-65vmax;
-    top:5vh;
-
-    animation:
-        smokeLeft 3.2s
-        cubic-bezier(.35,.05,.25,1)
-        1.25s forwards;
-}
-
-
-/* =====================================================
-   NUBE DESTRA
-   ===================================================== */
-
-.s2{
-
-    width:95vmax;
-    height:72vmax;
-
-    right:-70vmax;
-    top:-5vh;
-
-    animation:
-        smokeRight 3.25s
-        cubic-bezier(.35,.05,.25,1)
-        1.35s forwards;
-}
-
-
-/* =====================================================
-   NUBE DAL BASSO
-   ===================================================== */
-
-.s3{
-
-    width:110vmax;
-    height:75vmax;
-
-    left:5vw;
-    bottom:-65vmax;
-
-    animation:
-        smokeBottom 3.35s
-        cubic-bezier(.35,.05,.25,1)
-        1.40s forwards;
-}
-
-
-/* =====================================================
-   VORTICE CENTRALE NERO
-   ===================================================== */
-
-.s4{
-
-    width:95vmax;
-    height:80vmax;
-
-    left:20vw;
-    top:10vh;
-
-    background:
-
-        radial-gradient(
-            ellipse at center,
-            rgba(0,0,0,1) 0%,
-            rgba(8,8,8,.98) 28%,
-            rgba(90,0,0,.78) 48%,
-            rgba(230,0,0,.50) 62%,
-            transparent 80%
-        );
-
-    animation:
-        smokeVortex 2.9s
-        cubic-bezier(.3,.05,.3,1)
-        1.55s forwards;
-}
-
-
-/* =====================================================
-   FILAMENTO ROSSO 1
-   ===================================================== */
-
-.s5{
-
-    width:75vmax;
-    height:28vmax;
-
-    left:-45vmax;
-    top:35vh;
-
-    filter:
-        blur(13px)
-        saturate(1.8);
-
-    background:
-
-        radial-gradient(
-            ellipse,
-            rgba(255,25,10,.95) 0%,
-            rgba(210,0,0,.78) 20%,
-            rgba(60,0,0,.60) 48%,
-            transparent 72%
-        );
-
-    animation:
-        redTwist1 3.1s
-        ease-in-out
-        1.35s forwards;
-}
-
-
-/* =====================================================
-   FILAMENTO ROSSO 2
-   ===================================================== */
-
-.s6{
-
-    width:80vmax;
-    height:30vmax;
-
-    right:-50vmax;
-    top:18vh;
-
-    filter:
-        blur(15px)
-        saturate(1.8);
-
-    background:
-
-        radial-gradient(
-            ellipse,
-            rgba(255,20,10,.92) 0%,
-            rgba(180,0,0,.75) 22%,
-            rgba(40,0,0,.65) 50%,
-            transparent 74%
-        );
-
-    animation:
-        redTwist2 3.2s
-        ease-in-out
-        1.45s forwards;
-}
-
-
-/* =====================================================
-   ANIMAZIONI
-   ===================================================== */
-
+/* ==================================================
+   MOVIMENTI DEL FUMO
+   ================================================== */
 
 @keyframes smokeLeft{
 
-    0%{
-        opacity:0;
-        transform:
-            translateX(0)
-            rotate(-15deg)
-            scale(.55);
-    }
+  0%{
+    opacity:0;
+    transform:
+      translateX(0)
+      scale(.65);
+  }
 
-    18%{
-        opacity:.85;
-    }
+  25%{
+    opacity:.95;
+  }
 
-    45%{
-        opacity:1;
-        transform:
-            translateX(62vmax)
-            translateY(-5vh)
-            rotate(12deg)
-            scale(1.10);
-    }
+  55%{
+    opacity:1;
+    transform:
+      translateX(65vmax)
+      scale(1.15);
+  }
 
-    58%{
-        opacity:1;
-        transform:
-            translateX(72vmax)
-            translateY(-2vh)
-            rotate(22deg)
-            scale(1.30);
-    }
+  75%{
+    opacity:.95;
+  }
 
-    75%{
-        opacity:.72;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            translateX(130vmax)
-            translateY(-30vh)
-            rotate(55deg)
-            scale(1.65);
-    }
+  100%{
+    opacity:.85;
+    transform:
+      translateX(100vmax)
+      translateY(-12vh)
+      scale(1.45);
+  }
 }
-
 
 
 @keyframes smokeRight{
 
-    0%{
-        opacity:0;
-        transform:
-            translateX(0)
-            rotate(18deg)
-            scale(.55);
-    }
+  0%{
+    opacity:0;
+    transform:
+      translateX(0)
+      scale(.60);
+  }
 
-    18%{
-        opacity:.85;
-    }
+  25%{
+    opacity:.90;
+  }
 
-    45%{
-        opacity:1;
-        transform:
-            translateX(-65vmax)
-            translateY(8vh)
-            rotate(-12deg)
-            scale(1.12);
-    }
+  55%{
+    opacity:1;
+    transform:
+      translateX(-70vmax)
+      scale(1.20);
+  }
 
-    58%{
-        opacity:1;
-        transform:
-            translateX(-76vmax)
-            rotate(-25deg)
-            scale(1.32);
-    }
+  75%{
+    opacity:.95;
+  }
 
-    75%{
-        opacity:.70;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            translateX(-135vmax)
-            translateY(-35vh)
-            rotate(-60deg)
-            scale(1.70);
-    }
+  100%{
+    opacity:.85;
+    transform:
+      translateX(-105vmax)
+      translateY(-15vh)
+      scale(1.45);
+  }
 }
-
 
 
 @keyframes smokeBottom{
 
-    0%{
-        opacity:0;
-        transform:
-            translateY(0)
-            rotate(0deg)
-            scale(.50);
-    }
+  0%{
+    opacity:0;
+    transform:
+      translateY(0)
+      scale(.60);
+  }
 
-    20%{
-        opacity:.80;
-    }
+  25%{
+    opacity:.85;
+  }
 
-    45%{
-        opacity:1;
-        transform:
-            translateY(-62vmax)
-            rotate(10deg)
-            scale(1.12);
-    }
+  55%{
+    opacity:1;
+    transform:
+      translateY(-65vmax)
+      scale(1.15);
+  }
 
-    58%{
-        opacity:1;
-        transform:
-            translateY(-72vmax)
-            rotate(-10deg)
-            scale(1.30);
-    }
+  75%{
+    opacity:.95;
+  }
 
-    78%{
-        opacity:.60;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            translateY(-130vmax)
-            rotate(35deg)
-            scale(1.70);
-    }
+  100%{
+    opacity:.85;
+    transform:
+      translateY(-100vmax)
+      scale(1.50);
+  }
 }
 
 
+@keyframes smokeCenter{
 
-@keyframes smokeVortex{
+  0%{
+    opacity:0;
+    transform:scale(.35);
+  }
 
-    0%{
-        opacity:0;
-        transform:
-            scale(.20)
-            rotate(-25deg);
-    }
+  30%{
+    opacity:.95;
+  }
 
-    25%{
-        opacity:.85;
-    }
+  55%{
+    opacity:1;
+    transform:scale(1.15);
+  }
 
-    48%{
-        opacity:1;
-        transform:
-            scale(1.10)
-            rotate(18deg);
-    }
+  75%{
+    opacity:1;
+  }
 
-    60%{
-        opacity:1;
-        transform:
-            scale(1.35)
-            rotate(32deg);
-    }
-
-    78%{
-        opacity:.55;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            scale(2.10)
-            rotate(80deg)
-            translateY(-10vh);
-    }
+  100%{
+    opacity:.95;
+    transform:
+      scale(1.75)
+      translateY(-8vh);
+  }
 }
 
 
-
-@keyframes redTwist1{
-
-    0%{
-        opacity:0;
-        transform:
-            translateX(0)
-            rotate(-20deg)
-            scale(.4);
-    }
-
-    25%{
-        opacity:.85;
-    }
-
-    50%{
-        opacity:1;
-        transform:
-            translateX(70vmax)
-            translateY(-12vh)
-            rotate(35deg)
-            scale(1.15);
-    }
-
-    68%{
-        opacity:.75;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            translateX(145vmax)
-            translateY(-40vh)
-            rotate(100deg)
-            scale(1.65);
-    }
-}
-
-
-
-@keyframes redTwist2{
-
-    0%{
-        opacity:0;
-        transform:
-            translateX(0)
-            rotate(25deg)
-            scale(.4);
-    }
-
-    25%{
-        opacity:.85;
-    }
-
-    50%{
-        opacity:1;
-        transform:
-            translateX(-75vmax)
-            translateY(15vh)
-            rotate(-35deg)
-            scale(1.18);
-    }
-
-    68%{
-        opacity:.70;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            translateX(-145vmax)
-            translateY(-35vh)
-            rotate(-105deg)
-            scale(1.70);
-    }
-}
-
-
-/* =====================================================
+/* ==================================================
    SMARTPHONE
-   ===================================================== */
+   ================================================== */
 
-@media (max-width:700px){
+@media(max-width:700px){
 
-    #channel{
-        object-position:center center;
-    }
+  #legion{
+    object-position:center center;
+  }
 
-    #legion{
-        object-position:center center;
-    }
-
-    .s1,
-    .s2,
-    .s3,
-    .s4{
-        transform-origin:center;
-    }
 }
 
 </style>
@@ -571,79 +328,131 @@ html,body{
 <body>
 
 
-<!--
-PAGINA YOUTUBE.
-È già presente sotto Legion fin dall'inizio.
--->
-
-<img
-    id="channel"
-    src="youtube-channel.png"
-    alt="">
-
-
 <!-- LEGION -->
 
 <img
-    id="legion"
-    src="OK.png"
-    alt="">
+  id="legion"
+  src="OK.png"
+  alt="LegionBlackJournal">
 
 
 <!-- FUMO -->
 
 <div id="smoke">
 
-    <div class="smoke s1"></div>
+  <div class="puff p1"></div>
 
-    <div class="smoke s2"></div>
+  <div class="puff p2"></div>
 
-    <div class="smoke s3"></div>
+  <div class="puff p3"></div>
 
-    <div class="smoke s4"></div>
-
-    <div class="smoke s5"></div>
-
-    <div class="smoke s6"></div>
+  <div class="puff p4"></div>
 
 </div>
 
 
 <script>
 
-const YOUTUBE =
+/* ==================================================
+   DESTINAZIONE
+   ================================================== */
+
+const CHANNEL =
 "https://www.youtube.com/@LegionBlackJournal";
 
 
-/*
-SEQUENZA
+/* ==================================================
+   APERTURA YOUTUBE
+   ================================================== */
 
-0.00  Legion visibile
+function openYouTube(){
 
-1.25  comincia il fumo nero/rosso
+  const mobile =
+    /Android|iPhone|iPad|iPod/i.test(
+      navigator.userAgent
+    );
 
-2.95  il fumo ha coperto Legion:
-      Legion viene eliminato definitivamente
 
-3.00+ sotto il fumo c'è GIÀ
-      youtube-channel.png
+  /* ------------------------------
+     PC
+     ------------------------------ */
 
-4.5 circa:
-      il fumo si apre e mostra YouTube
+  if(!mobile){
 
-5.0:
-      passaggio alla pagina YouTube vera
-*/
+    window.location.replace(CHANNEL);
 
+    return;
+  }
+
+
+  /* ------------------------------
+     ANDROID
+     ------------------------------ */
+
+  if(/Android/i.test(navigator.userAgent)){
+
+    const intent =
+      "intent://www.youtube.com/@LegionBlackJournal" +
+      "#Intent;" +
+      "scheme=https;" +
+      "package=com.google.android.youtube;" +
+      "S.browser_fallback_url=" +
+      encodeURIComponent(CHANNEL) +
+      ";end";
+
+    window.location.href = intent;
+
+    return;
+  }
+
+
+  /* ------------------------------
+     IPHONE / IPAD
+
+     Proviamo ad aprire l'app YouTube.
+     Se non parte, fallback al browser.
+     ------------------------------ */
+
+  if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){
+
+    window.location.href =
+      "youtube://www.youtube.com/@LegionBlackJournal";
+
+    setTimeout(()=>{
+
+      if(!document.hidden){
+        window.location.replace(CHANNEL);
+      }
+
+    },1200);
+
+    return;
+  }
+
+
+  window.location.replace(CHANNEL);
+}
+
+
+/* ==================================================
+   SEQUENZA
+
+   0.00 s  Legion
+   1.55 s  parte il fumo
+   3.8  s  immagine quasi completamente coperta
+   4.15 s  apertura YouTube
+
+   NON compare più la foto della pagina YouTube.
+   ================================================== */
 
 setTimeout(()=>{
 
-    window.location.replace(YOUTUBE);
+  openYouTube();
 
-},5000);
-
+},4150);
 
 </script>
+
 
 </body>
 </html>
