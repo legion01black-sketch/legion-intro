@@ -6,6 +6,10 @@
 <title>LegionBlackJournal</title>
 <style>
   html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  /* Riempie le eventuali bande ai lati con la stessa grafica sfocata, senza tagli né deformazioni */
+  #fill { position: fixed; inset: -40px; background: #000 center / cover no-repeat; filter: blur(40px) brightness(.7); }
+  @media (orientation: landscape) and (min-width: 700px) { #fill { background-image: url(legion-desktop.jpg); } }
+  @media not all and (orientation: landscape) and (min-width: 700px) { #fill { background-image: url(legion-mobile.jpg); } }
   #stage { position: fixed; inset: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
   #stage picture { position: absolute; inset: 0; }
   /* Mai deformata: proporzioni sempre mantenute */
@@ -38,6 +42,7 @@
 </head>
 <body>
 
+<div id="fill"></div>
 <div id="stage" role="img" aria-label="LegionBlackJournal">
   <!-- Grafica originale: PC in orizzontale = 16:9, smartphone = verticale -->
   <picture>
