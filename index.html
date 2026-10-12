@@ -65,26 +65,12 @@
   var audio = document.getElementById("music");
   var blue = document.getElementById("blue");
   var box = document.getElementById("countdown");
-  var playing = false, leaving = false;
+  var started = false, leaving = false;
 
   audio.volume = 1;
-  function startAudio() {
-    var p = audio.play();
-    if (p && p.then) p.then(function () { playing = true; }).catch(function () { playing = false; });
-  }
+  box.textContent = 10;
+
   function stopAudio() { try { audio.pause(); } catch (e) {} }
-
-  // Tentativo di riproduzione automatica (i browser possono bloccarla)
-  startAudio();
-
-  // Il tocco/clic ferma il lampeggio (il pulsante resta azzurro) e, se serve, attiva la musica.
-  // Il conto alla rovescia continua: il canale si apre a 0.
-  function touched() {
-    blue.classList.add("steady");
-    if (!playing) startAudio();
-  }
-  document.getElementById("stage").addEventListener("pointerdown", touched);
-  window.addEventListener("keydown", touched);
 
   function go() {
     if (leaving) return;
@@ -93,17 +79,26 @@
     window.location.href = URL; // stessa scheda
   }
 
-  var n = 10;
-  box.textContent = n;
-  var timer = setInterval(function () {
-    n--;
-    box.textContent = n;
-    if (n <= 0) {
-      clearInterval(timer);
-      setTimeout(go, 700);
-    }
-  }, 1000);
+  // UN SOLO tocco/clic: ferma il lampeggio, avvia la musica e fa partire i 10 secondi
+  function start() {
+    if (started) return;
+    started = true;
+    blue.classList.add("steady");
+    var p = audio.play();
+    if (p && p.catch) p.catch(function () {});
+    var n = 10;
+    var timer = setInterval(function () {
+      n--;
+      box.textContent = n;
+      if (n <= 0) {
+        clearInterval(timer);
+        setTimeout(go, 700);
+      }
+    }, 1000);
+  }
 
+  document.getElementById("stage").addEventListener("click", start);
+  window.addEventListener("keydown", start);
   window.addEventListener("pagehide", stopAudio);
 })();
 </script>
