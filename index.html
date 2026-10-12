@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LegionBlackJournal</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  #stage { position: fixed; inset: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; }
+  #stage picture { position: absolute; inset: 0; }
+  /* Mai deformata: proporzioni sempre mantenute */
+  #stage img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; -webkit-user-drag: none; }
+
+  /* Livello azzurro (pulsante "CLICCA PER VEDERE IL VIDEO"): lampeggia fino al tocco */
+  #blue { opacity: 0; animation: blink 0.8s ease-in-out infinite alternate; }
+  #blue.steady { animation: none; opacity: 1; }
+  @keyframes blink { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { #blue { animation-duration: 1.6s; } }
+
+  #countdown {
+    position: fixed;
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    width: clamp(56px, 9vmin, 92px);
+    height: clamp(56px, 9vmin, 92px);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: #000;
+    border: 2px solid #3a0000;
+    display: flex; align-items: center; justify-content: center;
+    color: #ff1a1a;
+    font: 700 clamp(26px, 4.6vmin, 46px)/1 Arial, Helvetica, sans-serif;
+    text-shadow: 0 0 6px #ff0000, 0 0 16px #ff0000;
+    box-shadow: 0 0 14px rgba(255, 0, 0, .35);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="stage" role="img" aria-label="LegionBlackJournal">
+  <!-- Grafica originale: PC in orizzontale = 16:9, smartphone = verticale -->
+  <picture>
+    <source media="(orientation: landscape) and (min-width: 700px)" srcset="legion-desktop.jpg">
+    <img src="legion-mobile.jpg" alt="">
+  </picture>
+  <!-- Stessa grafica con il pulsante azzurro, sovrapposta e lampeggiante -->
+  <picture id="blue">
+    <source media="(orientation: landscape) and (min-width: 700px)" srcset="legion-desktop-blue.jpg">
+    <img src="legion-mobile-blue.jpg" alt="">
+  </picture>
+</div>
+
+<div id="countdown">10</div>
+<audio id="music" src="audio.mp3" preload="auto"></audio>
+
+<script>
+(function () {
+  var URL = "https://www.youtube.com/@LegionBlackJournal";
+  var audio = document.getElementById("music");
+  var blue = document.getElementById("blue");
+  var box = document.getElementById("countdown");
+  var playing = false, leaving = false;
+
+  audio.volume = 1;
+  function startAudio() {
+    var p = audio.play();
+    if (p && p.then) p.then(function () { playing = true; }).catch(function () { playing = false; });
+  }
+  function stopAudio() { try { audio.pause(); } catch (e) {} }
+
+  // Tentativo di riproduzione automatica (i browser possono bloccarla)
+  startAudio();
+
+  // Il tocco/clic ferma il lampeggio (il pulsante resta azzurro) e, se serve, attiva la musica.
+  // Il conto alla rovescia continua: il canale si apre a 0.
+  function touched() {
+    blue.classList.add("steady");
+    if (!playing) startAudio();
+  }
+  document.getElementById("stage").addEventListener("pointerdown", touched);
+  window.addEventListener("keydown", touched);
+
+  function go() {
+    if (leaving) return;
+    leaving = true;
+    stopAudio();
+    window.location.href = URL; // stessa scheda
+  }
+
+  var n = 10;
+  box.textContent = n;
+  var timer = setInterval(function () {
+    n--;
+    box.textContent = n;
+    if (n <= 0) {
+      clearInterval(timer);
+      setTimeout(go, 700);
+    }
+  }, 1000);
+
+  window.addEventListener("pagehide", stopAudio);
+})();
+</script>
+</body>
+</html>
